@@ -1,4 +1,4 @@
-# Idemoooooooo
+# Idemoooooooo hard-core
 
 ## Penjo i Plavec teza inacica
 
