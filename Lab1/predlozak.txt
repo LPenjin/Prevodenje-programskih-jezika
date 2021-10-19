@@ -1,0 +1,11 @@
+pocetak
+import sys
+def main():
+    l = []
+    for line in sys.stdin:
+        l.append(line)
+
+zavrsetak
+if __name__ == "__main__":
+    main()
+
