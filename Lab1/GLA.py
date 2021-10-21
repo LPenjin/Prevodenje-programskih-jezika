@@ -22,7 +22,7 @@ def main():
             novi_predlozak = True
 
     #Otvaranje fajla za analizator
-    file = open('analizator/LA.py', 'w')
+    file = open('analizator/tablica.py', 'w')
     file.write(stringovi['pocetak'])
 
     #Upisivanje svih linija u jednu listu
@@ -48,6 +48,7 @@ def main():
         if stanje == 1:
             if l[i].startswith('%X'):
                 temp = l[i].strip()[3:].split(' ')
+                pocetno_stanje = temp[0]
                 for s in temp:
                     prijelazi[s] = []
             else:
@@ -61,7 +62,7 @@ def main():
         if stanje == 3:
             if l[i].startswith('<'):
                 temp = l[i].strip().replace('<', '').replace('>', ' ').split(' ')
-                prijelaz = [temp[1]]
+                prijelaz = [temp[1].replace('$', '$^')]
                 stanje_prijelaza = temp[0]
             elif l[i].startswith('{'):
                 stanje = 4
@@ -78,6 +79,11 @@ def main():
     print('Imena ',imena_lex_jedinki)
     print('prijelazi', prijelazi)
 
+    file.write(stringovi['Tablica'])
+    file.write('\tpocetno_stanje = ' + '\'' + pocetno_stanje + '\'' + '\n')
+    file.write('\tReg_def = ' + str(reg_def) + '\n')
+    file.write('\tImena = ' + str(imena_lex_jedinki) + '\n')
+    file.write('\tprijelazi = ' + str(prijelazi) + '\n')
     file.write(stringovi['zavrsetak'])
     file.close()
 

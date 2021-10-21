@@ -4,8 +4,12 @@ def main():
     l = []
     for line in sys.stdin:
         l.append(line)
+    print(l)
 
 zavrsetak
 if __name__ == "__main__":
     main()
+
+Tablica
+class Tablica:
 
