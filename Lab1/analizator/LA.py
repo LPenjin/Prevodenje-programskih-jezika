@@ -33,7 +33,7 @@ def main():
     red = 1
     first_index = 0
     l = ''.join(l)
-    print(l)
+    #print(l)
     last_match_list = []
     for index in range(len(l)):
         match_list = []
@@ -72,8 +72,8 @@ def main():
         max_match_index = 0
 
         for match in range(len(match_list)):
-            if max_match < match_list[match].endpos - match_list[match].pos:
-                max_match = match_list[match].endpos - match_list[match].pos
+            if max_match < match_list[match][0].endpos - match_list[match][0].pos:
+                max_match = match_list[match][0].endpos - match_list[match][0].pos
                 max_match_index = match
 
         red, stanje, index = solve_match(match_list[max_match_index][1], match_list[max_match_index][0].string
