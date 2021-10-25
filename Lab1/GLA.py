@@ -1,5 +1,5 @@
 import sys
-
+import re
 
 def main():
     predlozak = open('predlozak.txt', 'r')
@@ -41,7 +41,7 @@ def main():
             if l[i][0] == '{':
                 temp = l[i].split(' ')
                 reg_def_name = temp[0].replace('{', '').replace('}', '')
-                reg_def_list = temp[1].strip().split('|')
+                reg_def_list = temp[1].strip()
                 reg_def[reg_def_name] = reg_def_list
             else:
                 stanje = 1
@@ -73,6 +73,11 @@ def main():
             else:
                 stanje = 3
                 prijelazi[stanje_prijelaza].append(prijelaz)
+
+    for definition in reg_def.keys():
+        if x := re.findall('{[a-zA-Z]*}', reg_def[definition]):
+            for match in x:
+                reg_def[definition] = reg_def[definition].replace(match, f'({reg_def[match[1:-1]]})')
 
     #debug stuff
     print('Reg_def ', reg_def)
