@@ -62,7 +62,7 @@ def main():
         if stanje == 3:
             if l[i].startswith('<'):
                 temp = l[i].strip().replace('<', '').replace('>', ' ').split(' ')
-                prijelaz = [temp[1].replace('$', '$^')]
+                prijelaz = [temp[1].replace('$', '')]
                 stanje_prijelaza = temp[0]
             elif l[i].startswith('{'):
                 stanje = 4
