@@ -24,20 +24,20 @@ def is_multiple_matches(match_list):
     ending_pos = -1
     match_index = 0
     for i in range(len(match_list)):
-        if match_list[i][0].span()[0] < starting_pos:
-            starting_pos = match_list[i][0].span()[0]
-        if match_list[i][0].span()[1] > ending_pos:
-            ending_pos = match_list[i][0].span()[1]
+        if match_list[i][2][0] < starting_pos:
+            starting_pos = match_list[i][2][0]
+        if match_list[i][2][1] > ending_pos:
+            ending_pos = match_list[i][2][1]
 
     l = [0 for i in range(ending_pos-starting_pos)]
     k = [0 for i in range(ending_pos-starting_pos)]
 
     for match in match_list:
-        for i in range(match[0].span()[0] - starting_pos, match[0].span()[1] - starting_pos):
+        for i in range(match[2][0] - starting_pos, match[2][1] - starting_pos):
             l[i] += 1
 
     for j in range(len(match_list)):
-        for i in range(match_list[j][0].span()[0] - starting_pos, match_list[j][0].span()[1] - starting_pos):
+        for i in range(match_list[j][2][0] - starting_pos, match_list[j][2][1] - starting_pos):
             k[i] = j + 1
 
     imp_sum = l[-1] + k[-1]
@@ -47,8 +47,8 @@ def is_multiple_matches(match_list):
         temp_sum = l[i] + k[i]
         if temp_sum != imp_sum:
             for match in range(len(match_list)):
-                if match_index < match_list[match][0].span()[1] - match_list[match][0].span()[0]:
-                    max_match = match_list[match][0].span()[1] - match_list[match][0].span()[0]
+                if match_index < match_list[match][2][1] - match_list[match][2][0]:
+                    max_match = match_list[match][2][1] - match_list[match][2][0]
                     match_index = match
             if match_list[match_index] != match_list[-1]:
                 return match_index
@@ -87,25 +87,33 @@ def main():
         match_list = []
         for prijelaz in prijelazi[stanje]:
             offset = 0
-            if x := re.search(prijelaz[0], l[first_index + offset:index]):
-                    match_list.append([x, prijelaz])
+            while first_index + offset < index:
+                if x := re.search(prijelaz[0], l[first_index + offset:index]):
+                    new_offset = offset + x.span()[1]
+                    span = []
+                    span.append(x.span()[0] + offset)
+                    span.append(x.span()[1] + offset)
+                    offset = new_offset
+                    match_list.append([x, prijelaz, span])
+                else:
+                    offset += 1
         max_match = 0
         max_match_index = 0
 
         for match in range(len(match_list)):
-            if max_match < match_list[match][0].span()[1] - match_list[match][0].span()[0]:
-                max_match = match_list[match][0].span()[1] - match_list[match][0].span()[0]
+            if max_match < match_list[match][2][1] - match_list[match][2][0]:
+                max_match = match_list[match][2][1] - match_list[match][2][0]
                 max_match_index = match
 
         if len(match_list) >= 2:
-            match_list.sort(key = lambda x: x[0].span())
+            match_list.sort(key = lambda x: x[2])
             match_index = is_multiple_matches(match_list)
             if match_index != None:
                 #print('Puno je elemenata')
                 red, stanje, index = solve_match(match_list[match_index][1], match_list[match_index][0].string
-                [match_list[match_index][0].span()[0]:match_list[match_index][0].span()[1]],
+                [match_list[match_index][2][0]:match_list[match_index][2][1]],
                                                  red, index, stanje)
-                first_index += match_list[match_index][0].span()[1]
+                first_index += match_list[match_index][2][1]
 
         """elif len(last_match_list) == len(match_list):
             for last_match in last_match_list:
@@ -129,7 +137,7 @@ def main():
                 max_match_index = match
 
         red, stanje, index = solve_match(match_list[max_match_index][1], match_list[max_match_index][0].string
-        [match_list[max_match_index][0].span()[0]:match_list[max_match_index][0].span()[1]],
+        [match_list[max_match_index][2][0]:match_list[max_match_index][2][1]],
                                          red, index, stanje)
 
 
