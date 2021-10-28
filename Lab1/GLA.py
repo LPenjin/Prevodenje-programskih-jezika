@@ -87,11 +87,15 @@ def main():
             for match in x:
                 reg_def[definition] = reg_def[definition].replace(match, f'({reg_def[match[1:-1]]})')
 
+    special_letters = ['?', '.', '^', '+']
     for stanje in prijelazi.keys():
         for prijelaz in range(len(prijelazi[stanje])):
             if x := re.findall('{[a-zA-Z]*}', prijelazi[stanje][prijelaz][0]):
                 for match in x:
                     prijelazi[stanje][prijelaz][0] = prijelazi[stanje][prijelaz][0].replace(match, f'({reg_def[match[1:-1]]})')
+            for letter in special_letters:
+                prijelazi[stanje][prijelaz][0] = prijelazi[stanje][prijelaz][0].replace(letter, '\\' + letter)
+
 
 
     #debug stuff

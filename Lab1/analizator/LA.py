@@ -11,7 +11,7 @@ def solve_match(prijelaz, match, red, index, stanje):
             temp = korak.split()[1]
             novo_stanje = temp
         elif korak.startswith('VRATI_SE'):
-            temp = korak.split()[1]
+            temp = int(korak.split()[1])
             index = index - temp
         elif korak != '-':
             print(korak, red, match)
@@ -87,7 +87,6 @@ def main():
         for value in prijelaz:
             if value[0] == '\_':
                 value[0] = ' '
-    last_match_list = []
     for index in range(len(l)):
         match_list = []
         for prijelaz in prijelazi[stanje]:
@@ -120,18 +119,6 @@ def main():
                 [match_list[match_index][2][0]:match_list[match_index][2][1]],
                                                  red, index, stanje)
                 first_index += match_list[match_index][2][1]
-
-        """elif len(last_match_list) == len(match_list):
-            for last_match in last_match_list:
-                for match in match_list:
-                    if match[0].re.pattern == last_match[0].re.pattern and match[0].span()[0] == last_match[0].span()[0] and match[0].span()[1] == last_match[0].span()[1]:
-                        first_index = index - 1
-                        print('Ovaj kurac')
-                        #print(match_list[max_match_index].span()[0], match_list[max_match_index].span()[1])
-                        red, stanje, index = solve_match(match_list[max_match_index][1], match_list[max_match_index][0].string
-                        [match_list[max_match_index][0].span()[0]:match_list[max_match_index][0].span()[1]],
-                                                         red, index, stanje)"""
-        last_match_list = match_list.copy()
 
     if match_list:
         max_match = 0
