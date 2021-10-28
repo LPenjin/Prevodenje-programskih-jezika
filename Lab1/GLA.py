@@ -7,6 +7,9 @@ def get_input():
         l.append(line)
     return l
 
+def escape_chars(string):
+    return string
+
 def main():
     predlozak = open('predlozak.txt', 'r')
     predlosci = predlozak.readlines()
@@ -47,6 +50,7 @@ def main():
                 reg_def_name = temp[0].replace('{', '').replace('}', '')
                 reg_def_list = temp[1].strip()
                 reg_def[reg_def_name] = reg_def_list
+                reg_def[reg_def_name] = escape_chars(reg_def[reg_def_name])
             else:
                 stanje = 1
         if stanje == 1:
@@ -82,6 +86,13 @@ def main():
         if x := re.findall('{[a-zA-Z]*}', reg_def[definition]):
             for match in x:
                 reg_def[definition] = reg_def[definition].replace(match, f'({reg_def[match[1:-1]]})')
+
+    for stanje in prijelazi.keys():
+        for prijelaz in range(len(prijelazi[stanje])):
+            if x := re.findall('{[a-zA-Z]*}', prijelazi[stanje][prijelaz][0]):
+                for match in x:
+                    prijelazi[stanje][prijelaz][0] = prijelazi[stanje][prijelaz][0].replace(match, f'({reg_def[match[1:-1]]})')
+
 
     #debug stuff
     print('Reg_def ', reg_def)

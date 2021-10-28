@@ -23,9 +23,6 @@ def is_multiple_matches(match_list):
     starting_pos = 100000000000000000000000
     ending_pos = -1
     max_match = 0
-    #Checks for delimiter inside match list
-    if '-' not in match_list[-1][1] and '-' not in match_list[0][1]:
-        return None
 
     #Finds the starting and ending index
     for i in range(len(match_list)):
@@ -96,6 +93,7 @@ def main():
         for prijelaz in prijelazi[stanje]:
             offset = 0
             while first_index + offset < index:
+                #print(index)
                 if x := re.search(prijelaz[0], l[first_index + offset:index]):
                     new_offset = offset + x.span()[1]
                     span = []
