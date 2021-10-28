@@ -1,6 +1,12 @@
 import sys
 import re
 
+def get_input():
+    l = []
+    for line in sys.stdin:
+        l.append(line)
+    return l
+
 def main():
     predlozak = open('predlozak.txt', 'r')
     predlosci = predlozak.readlines()
@@ -26,9 +32,7 @@ def main():
     file.write(stringovi['pocetak'])
 
     #Upisivanje svih linija u jednu listu
-    l = []
-    for line in sys.stdin:
-        l.append(line)
+    l = get_input()
 
     #Unosenje iz ulazne datoteke u podatkovne strukture
     reg_def = {}

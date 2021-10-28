@@ -22,7 +22,12 @@ def solve_match(prijelaz, match, red, index, stanje):
 def is_multiple_matches(match_list):
     starting_pos = 100000000000000000000000
     ending_pos = -1
-    match_index = 0
+    max_match = 0
+    #Checks for delimiter inside match list
+    if '-' not in match_list[-1][1] and '-' not in match_list[0][1]:
+        return None
+
+    #Finds the starting and ending index
     for i in range(len(match_list)):
         if match_list[i][2][0] < starting_pos:
             starting_pos = match_list[i][2][0]
@@ -32,10 +37,12 @@ def is_multiple_matches(match_list):
     l = [0 for i in range(ending_pos-starting_pos)]
     k = [0 for i in range(ending_pos-starting_pos)]
 
+    #Marks which letters are used by multiple regexes
     for match in match_list:
         for i in range(match[2][0] - starting_pos, match[2][1] - starting_pos):
             l[i] += 1
 
+    #Marks which letter are used by what regex
     for j in range(len(match_list)):
         for i in range(match_list[j][2][0] - starting_pos, match_list[j][2][1] - starting_pos):
             k[i] = j + 1
@@ -43,11 +50,12 @@ def is_multiple_matches(match_list):
     imp_sum = l[-1] + k[-1]
     last_regex = k[-1]
     i = len(l) - 1
+    #Checks if there are regexes that are not overlapping
     while i > -1:
         temp_sum = l[i] + k[i]
         if temp_sum != imp_sum:
             for match in range(len(match_list)):
-                if match_index < match_list[match][2][1] - match_list[match][2][0]:
+                if max_match < match_list[match][2][1] - match_list[match][2][0]:
                     max_match = match_list[match][2][1] - match_list[match][2][0]
                     match_index = match
             if match_list[match_index] != match_list[-1]:
