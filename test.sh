@@ -10,8 +10,10 @@ for DIR in $(ls -d test_primjeri/*); do
   if [[ ${DIFF} != "" ]]; then
     echo "${DIR}"
     echo "${DIFF}"
-    exit 1;
   else
     echo "${DIR} is fine."
   fi
 done
+
+exit 1
+

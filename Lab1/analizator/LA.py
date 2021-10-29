@@ -80,31 +80,51 @@ def main():
     prijelazi = Tablica.prijelazi
     red = 1
     first_index = 0
-    l = ''.join(l)
     #print(l)
     #print(prijelazi)
     for prijelaz in prijelazi.values():
         for value in prijelaz:
             if value[0] == '\_':
                 value[0] = ' '
-    for index in range(len(l)):
+    for line in range(len(l)):
         match_list = []
-        for prijelaz in prijelazi[stanje]:
-            offset = 0
-            while first_index + offset < index:
-                #print(index)
-                if x := re.search(prijelaz[0], l[first_index + offset:index]):
-                    new_offset = offset + x.span()[1]
-                    span = []
-                    span.append(x.span()[0] + offset)
-                    span.append(x.span()[1] + offset)
-                    offset = new_offset
-                    match_list.append([x, prijelaz, span])
-                else:
-                    offset += 1
+        for stanje_it in prijelazi.keys():
+                for prijelaz in prijelazi[stanje_it]:
+                    offset = 0
+                    while first_index + offset < len(l[line]):
+                        #print(index)
+                        if x := re.search(prijelaz[0], l[line][first_index + offset:]):
+                            new_offset = offset + x.span()[1]
+                            span = []
+                            span.append(x.span()[0] + offset)
+                            span.append(x.span()[1] + offset)
+                            offset = new_offset
+                            match_list.append([x, prijelaz, span])
+                        else:
+                            offset += 1
+        match_list.sort(key=lambda x: x[2])
+        #print(match_list)
+
+        match_list_overlap = []
+        overlapping = []
+        for i in range(len(match_list)):
+            if match_list[i] not in overlapping:
+                overlap = [match_list[i]]
+                for j in range(len(match_list)):
+                    if match_list[j][2][0] >= match_list[i][2][0] and match_list[j][2][1] <= match_list[i][2][1] and j != i:
+                        overlap.append(match_list[j])
+                        overlapping.append(match_list[j])
+                match_list_overlap.append(overlap)
+
+        print(match_list_overlap)
+
+        for i in range(len(match_list_overlap)):
+            solve_match(match_list_overlap[i][0][1], l[line]
+            [match_list_overlap[i][0][2][0]:match_list_overlap[i][0][2][1]],
+                                             line + 1, 0, stanje)
         max_match = 0
         max_match_index = 0
-
+        """
         for match in range(len(match_list)):
             if max_match < match_list[match][2][1] - match_list[match][2][0]:
                 max_match = match_list[match][2][1] - match_list[match][2][0]
@@ -131,7 +151,7 @@ def main():
 
         red, stanje, index = solve_match(match_list[max_match_index][1], match_list[max_match_index][0].string
         [match_list[max_match_index][2][0]:match_list[max_match_index][2][1]],
-                                         red, index, stanje)
+                                         red, index, stanje)"""
 
 
 
