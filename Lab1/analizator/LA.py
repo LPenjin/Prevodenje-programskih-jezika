@@ -114,6 +114,8 @@ def main():
                     if match_list[j][2][0] >= match_list[i][2][0] and match_list[j][2][1] <= match_list[i][2][1] and j != i:
                         overlap.append(match_list[j])
                         overlapping.append(match_list[j])
+                    elif match_list[i][2][0] >= match_list[j][2][0] and match_list[i][2][1] <= match_list[j][2][1] and j != i:
+                        continue
                 match_list_overlap.append(overlap)
 
         print(match_list_overlap)

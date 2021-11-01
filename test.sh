@@ -4,12 +4,13 @@ LAB=Lab1
 
 cd ${LAB}
 
-for DIR in $(ls -d test_primjeri/*); do
-  cat ${DIR}/test.lan | python3 GLA.py 1>/dev/null && OUTPUT="$(cat ${DIR}/test.in | python3 analizator/LA.py)"
+for DIR in $(ls -d test_primjeri_laksi/*); do
+  OUTPUT="$(cat ${DIR}/test.in | python3 LeksickiAnalizator.py)"
   DIFF="$( diff ${DIR}/test.out <(echo "$OUTPUT") )"
   if [[ ${DIFF} != "" ]]; then
     echo "${DIR}"
     echo "${DIFF}"
+    exit 1
   else
     echo "${DIR} is fine."
   fi
