@@ -42,10 +42,8 @@ def rekurzivni_spust(node, new_state, l, index):
     line = l[index].split(' ')
     kw = line[0]
     state = new_state
-    not_found = True
     for prijelaz in prijelazi[state]:
         if kw in prijelaz[1]:
-            not_found = False
             #print(kw)
             #print(prijelaz)
             for new_node in prijelaz[0]:
@@ -54,19 +52,22 @@ def rekurzivni_spust(node, new_state, l, index):
                     index += 1
                     line = l[index].split(' ')
                     kw = line[0]
+                elif '<' not in new_node and kw != new_node and kw != '' and new_node != '$':
+                    print(f'err {line[0]} {line[1]} {line[2]}')
+                    return -1
                 elif '<' in new_node and kw != new_node:
                     node[state][new_node] = {}
                     new_state = new_node
-                    not_found, index = rekurzivni_spust(node[state], new_state, l, index)
+                    index = rekurzivni_spust(node[state], new_state, l, index)
                     if index == -1:
-                        return not_found, -1
-                    if not_found and kw != '':
-                        print(f'err {line[0]} {line[1]} {line[2]}')
-                        return not_found, -1
+                        return -1
                     line = l[index].split(' ')
                     kw = line[0]
+                elif new_node == '':
+                    print(f'err kraj')
+                    return -1
             break
-    return not_found, index
+    return index
 
 
 def get_input():
@@ -94,7 +95,7 @@ def main():
     index = 0
 
     gen_tree = {'<program>':{}}
-    not_found, success = rekurzivni_spust(gen_tree, '<program>', l, index)
+    success = rekurzivni_spust(gen_tree, '<program>', l, index)
 
     #print(gen_tree)
 
